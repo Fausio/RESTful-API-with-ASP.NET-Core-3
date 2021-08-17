@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Course.Library.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/authors/{authorId}/[controller]")]
     [ApiController]
     public class CourseController : ControllerBase
     {
@@ -19,5 +19,7 @@ namespace Course.Library.API.Controllers
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _repository = courseLibraryRepository ?? throw new ArgumentException(nameof(courseLibraryRepository));
         }
+
+
     }
 }
