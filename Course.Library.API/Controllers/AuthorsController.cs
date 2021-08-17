@@ -26,27 +26,12 @@ namespace Course.Library.API.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<AuthorDto>> GetAthors()
         {
-            IEnumerable<Author> result = _repository.GetAuthors();
-            List<AuthorDto> authorDto = new List<AuthorDto>();
-
-            foreach (Author autorData in result)
-            {
-                authorDto.Add(new AuthorDto()
-                {
-                    Id = autorData.Id,
-                    Name = $"{autorData.FirstName} {autorData.LastName}",
-                    MainCategory = autorData.MainCategory,
-                    Age = autorData.DateOfBirth.GetCurrentAge(),
-                    DateOfBirth = autorData.DateOfBirth.Date
-
-                }); ;
-            }
-
-            return Ok(authorDto);
+            IEnumerable<Author> result = _repository.GetAuthors(); 
+            return Ok(_mapper.Map<IEnumerable<AuthorDto>>(result));
         }
 
         [HttpGet("{Id:guid}")]
-        public IActionResult GetAthor(Guid Id)
+        public ActionResult<AuthorDto> GetAthor(Guid Id)
         {
             Author result = _repository.GetAuthor(Id);
 
@@ -55,7 +40,7 @@ namespace Course.Library.API.Controllers
                 return NotFound();
             }
 
-            return Ok(result);
+            return Ok(_mapper.Map<AuthorDto>(result));
         }
     }
 }
