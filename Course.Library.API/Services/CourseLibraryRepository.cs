@@ -1,16 +1,18 @@
-﻿using CourseLibrary.API.DbContexts; 
-using System; 
+﻿using CourseLibrary.API.DbContexts;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using Course.Library.API.Entities;
+using Course.Library.API.ResourceParameters;
+
 namespace CourseLibrary.API.Services
 {
     public class CourseLibraryRepository : ICourseLibraryRepository, IDisposable
     {
         private readonly CourseLibraryContext _context;
 
-        public CourseLibraryRepository(CourseLibraryContext context )
+        public CourseLibraryRepository(CourseLibraryContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
@@ -28,14 +30,14 @@ namespace CourseLibrary.API.Services
             }
             // always set the AuthorId to the passed-in authorId
             course.AuthorId = authorId;
-            _context.Courses.Add(course); 
-        }         
+            _context.Courses.Add(course);
+        }
 
         public void DeleteCourse(Course.Library.API.Entities.Course course)
         {
             _context.Courses.Remove(course);
         }
-  
+
         public Course.Library.API.Entities.Course GetCourse(Guid authorId, Guid courseId)
         {
             if (authorId == Guid.Empty)
@@ -106,7 +108,7 @@ namespace CourseLibrary.API.Services
 
             _context.Authors.Remove(author);
         }
-        
+
         public Author GetAuthor(Guid authorId)
         {
             if (authorId == Guid.Empty)
@@ -117,11 +119,39 @@ namespace CourseLibrary.API.Services
             return _context.Authors.FirstOrDefault(a => a.Id == authorId);
         }
 
+
         public IEnumerable<Author> GetAuthors()
         {
             return _context.Authors.ToList<Author>();
         }
-         
+        public IEnumerable<Author> GetAuthors(AuthorsResourceParameters authorsResourceParameters)
+        {
+            if (authorsResourceParameters == null)
+            {
+                throw new ArgumentNullException(nameof(authorsResourceParameters));
+            }
+
+            var data = _context.Authors as IQueryable<Author>;
+
+            if (!string.IsNullOrWhiteSpace(authorsResourceParameters.MainCategory))
+            {
+                authorsResourceParameters.MainCategory = authorsResourceParameters.MainCategory.Trim();
+                data = data.Where(x => x.MainCategory == authorsResourceParameters.MainCategory);
+            }
+
+            if (!string.IsNullOrWhiteSpace(authorsResourceParameters.SearchQuery))
+            {
+                authorsResourceParameters.SearchQuery = authorsResourceParameters.SearchQuery.Trim();
+                data = data.Where(x => x.MainCategory.Contains(authorsResourceParameters.SearchQuery)
+                                       || x.FirstName.Contains(authorsResourceParameters.SearchQuery)
+                                        || x.LastName.Contains(authorsResourceParameters.SearchQuery)
+                                 );
+            }
+
+            return data.ToList();
+
+        }
+
         public IEnumerable<Author> GetAuthors(IEnumerable<Guid> authorIds)
         {
             if (authorIds == null)
@@ -155,10 +185,10 @@ namespace CourseLibrary.API.Services
         {
             if (disposing)
             {
-               // dispose resources when needed
+                // dispose resources when needed
             }
         }
 
-       
+
     }
 }

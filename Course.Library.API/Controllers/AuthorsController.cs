@@ -2,6 +2,7 @@
 using Course.Library.API.Entities;
 using Course.Library.API.Helpers;
 using Course.Library.API.Models;
+using Course.Library.API.ResourceParameters;
 using CourseLibrary.API.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -24,9 +25,10 @@ namespace Course.Library.API.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<AuthorDto>> GetAthors()
+        public ActionResult<IEnumerable<AuthorDto>> GetAthors(
+                AuthorsResourceParameters authorsResourceParameters)
         {
-            IEnumerable<Author> result = _repository.GetAuthors(); 
+            IEnumerable<Author> result = _repository.GetAuthors(authorsResourceParameters); 
             return Ok(_mapper.Map<IEnumerable<AuthorDto>>(result));
         }
 
