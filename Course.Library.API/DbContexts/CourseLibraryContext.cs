@@ -1,6 +1,7 @@
-﻿using CourseLibrary.API.Entities;
+﻿ 
 using Microsoft.EntityFrameworkCore;
 using System;
+using Course.Library.API.Entities;
 
 namespace CourseLibrary.API.DbContexts
 {
@@ -12,7 +13,7 @@ namespace CourseLibrary.API.DbContexts
         }
 
         public DbSet<Author> Authors { get; set; }
-        public DbSet<Course> Courses { get; set; }
+        public DbSet<Course.Library.API.Entities.Course> Courses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -76,29 +77,29 @@ namespace CourseLibrary.API.DbContexts
                 }
                 );
 
-            modelBuilder.Entity<Course>().HasData(
-               new Course
+            modelBuilder.Entity<Course.Library.API.Entities.Course>().HasData(
+               new Course.Library.API.Entities.Course
                {
                    Id = Guid.Parse("5b1c2b4d-48c7-402a-80c3-cc796ad49c6b"),
                    AuthorId = Guid.Parse("d28888e9-2ba9-473a-a40f-e38cb54f9b35"),
                    Title = "Commandeering a Ship Without Getting Caught",
                    Description = "Commandeering a ship in rough waters isn't easy.  Commandeering it without getting caught is even harder.  In this course you'll learn how to sail away and avoid those pesky musketeers."
                },
-               new Course
+               new Course.Library.API.Entities.Course
                {
                    Id = Guid.Parse("d8663e5e-7494-4f81-8739-6e0de1bea7ee"),
                    AuthorId = Guid.Parse("d28888e9-2ba9-473a-a40f-e38cb54f9b35"),
                    Title = "Overthrowing Mutiny",
                    Description = "In this course, the author provides tips to avoid, or, if needed, overthrow pirate mutiny."
                },
-               new Course
+               new Course.Library.API.Entities.Course
                {
                    Id = Guid.Parse("d173e20d-159e-4127-9ce9-b0ac2564ad97"),
                    AuthorId = Guid.Parse("da2fd609-d754-4feb-8acd-c4f9ff13ba96"),
                    Title = "Avoiding Brawls While Drinking as Much Rum as You Desire",
                    Description = "Every good pirate loves rum, but it also has a tendency to get you into trouble.  In this course you'll learn how to avoid that.  This new exclusive edition includes an additional chapter on how to run fast without falling while drunk."
                },
-               new Course
+               new Course.Library.API.Entities.Course
                {
                    Id = Guid.Parse("40ff5488-fdab-45b5-bc3a-14302d59869a"),
                    AuthorId = Guid.Parse("2902b665-1190-4c70-9915-b9c2d7680450"),
