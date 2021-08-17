@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Course.Library.API.Models;
 using CourseLibrary.API.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -20,6 +21,43 @@ namespace Course.Library.API.Controllers
             _repository = courseLibraryRepository ?? throw new ArgumentException(nameof(courseLibraryRepository));
         }
 
+
+        [HttpGet]
+        public ActionResult<IEnumerable<CourseDto>> GetCourseForAuthor(Guid authorId)
+        {
+            if (!_repository.AuthorExists(authorId))
+            {
+                return NotFound();
+            }
+
+
+            IEnumerable<Entities.Course> result = _repository.GetCourses(authorId);
+
+            if (result.Count() == 0)
+            {
+                return NotFound();
+            }
+
+            return Ok(_mapper.Map<IEnumerable<CourseDto>>(result));
+        }
+
+        [HttpGet("{courseId:guid}")]
+        public ActionResult<CourseDto> GetCourseForAuthor(Guid authorId, Guid courseId)
+        {
+            if (!_repository.AuthorExists(authorId))
+            {
+                return NotFound();
+            } 
+             
+            Entities.Course result = _repository.GetCourse(authorId, courseId);
+
+            if (result == null)
+            {
+                return NotFound(); 
+            }
+
+            return Ok(_mapper.Map<CourseDto>(result));
+        }
 
     }
 }
