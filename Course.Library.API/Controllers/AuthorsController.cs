@@ -1,4 +1,5 @@
-﻿using Course.Library.API.Entities;
+﻿using AutoMapper;
+using Course.Library.API.Entities;
 using Course.Library.API.Helpers;
 using Course.Library.API.Models;
 using CourseLibrary.API.Services;
@@ -14,16 +15,18 @@ namespace Course.Library.API.Controllers
     [ApiController]
     public class AuthorsController : ControllerBase
     {
-        private readonly ICourseLibraryRepository repository;
-        public AuthorsController(ICourseLibraryRepository courseLibraryRepository)
+        private readonly ICourseLibraryRepository _repository;
+        private readonly IMapper _mapper;
+        public AuthorsController(ICourseLibraryRepository courseLibraryRepository, IMapper mapper)
         {
-            repository = courseLibraryRepository ?? throw new ArgumentException(nameof(courseLibraryRepository));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _repository = courseLibraryRepository ?? throw new ArgumentException(nameof(courseLibraryRepository));
         }
 
         [HttpGet]
         public ActionResult<IEnumerable<AuthorDto>> GetAthors()
         {
-            IEnumerable<Author> result = repository.GetAuthors();
+            IEnumerable<Author> result = _repository.GetAuthors();
             List<AuthorDto> authorDto = new List<AuthorDto>();
 
             foreach (Author autorData in result)
@@ -45,7 +48,7 @@ namespace Course.Library.API.Controllers
         [HttpGet("{Id:guid}")]
         public IActionResult GetAthor(Guid Id)
         {
-            Author result = repository.GetAuthor(Id);
+            Author result = _repository.GetAuthor(Id);
 
             if (result == null)
             {
