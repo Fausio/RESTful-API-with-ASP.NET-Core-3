@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace Course.Library.API.Profiles
 {
-    public class AuthorProfile :Profile
+    public class AuthorProfile : Profile
     {
+        public AuthorProfile()
+        {
+            CreateMap<Entities.Author, Models.AuthorDto>();
+        }
     }
 }
