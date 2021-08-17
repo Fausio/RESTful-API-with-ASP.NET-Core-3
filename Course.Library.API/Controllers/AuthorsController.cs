@@ -1,4 +1,6 @@
 ﻿using Course.Library.API.Entities;
+using Course.Library.API.Helpers;
+using Course.Library.API.Models;
 using CourseLibrary.API.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -19,10 +21,25 @@ namespace Course.Library.API.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAthors()
+        public ActionResult<IEnumerable<AuthorDto>> GetAthors()
         {
-            var result = repository.GetAuthors(); 
-            return Ok(result);
+            IEnumerable<Author> result = repository.GetAuthors();
+            List<AuthorDto> authorDto = new List<AuthorDto>();
+
+            foreach (Author autorData in result)
+            {
+                authorDto.Add(new AuthorDto()
+                {
+                    Id = autorData.Id,
+                    Name = $"{autorData.FirstName} {autorData.LastName}",
+                    MainCategory = autorData.MainCategory,
+                    Age = autorData.DateOfBirth.GetCurrentAge(),
+                    DateOfBirth = autorData.DateOfBirth.Date
+
+                }); ;
+            }
+
+            return Ok(authorDto);
         }
 
         [HttpGet("{Id:guid}")]
@@ -34,8 +51,8 @@ namespace Course.Library.API.Controllers
             {
                 return NotFound();
             }
-            
-            return   Ok(result);
+
+            return Ok(result);
         }
     }
 }
