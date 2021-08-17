@@ -1,9 +1,9 @@
-﻿using CourseLibrary.API.DbContexts;
-using CourseLibrary.API.Entities; 
-using System;
+﻿using CourseLibrary.API.DbContexts; 
+using System; 
 using System.Collections.Generic;
 using System.Linq;
-
+using System.Xml.Linq;
+using Course.Library.API.Entities;
 namespace CourseLibrary.API.Services
 {
     public class CourseLibraryRepository : ICourseLibraryRepository, IDisposable
@@ -15,7 +15,7 @@ namespace CourseLibrary.API.Services
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public void AddCourse(Guid authorId, Course course)
+        public void AddCourse(Guid authorId, Course.Library.API.Entities.Course course)
         {
             if (authorId == Guid.Empty)
             {
@@ -31,12 +31,12 @@ namespace CourseLibrary.API.Services
             _context.Courses.Add(course); 
         }         
 
-        public void DeleteCourse(Course course)
+        public void DeleteCourse(Course.Library.API.Entities.Course course)
         {
             _context.Courses.Remove(course);
         }
   
-        public Course GetCourse(Guid authorId, Guid courseId)
+        public Course.Library.API.Entities.Course GetCourse(Guid authorId, Guid courseId)
         {
             if (authorId == Guid.Empty)
             {
@@ -52,7 +52,7 @@ namespace CourseLibrary.API.Services
               .Where(c => c.AuthorId == authorId && c.Id == courseId).FirstOrDefault();
         }
 
-        public IEnumerable<Course> GetCourses(Guid authorId)
+        public IEnumerable<Course.Library.API.Entities.Course> GetCourses(Guid authorId)
         {
             if (authorId == Guid.Empty)
             {
@@ -64,7 +64,7 @@ namespace CourseLibrary.API.Services
                         .OrderBy(c => c.Title).ToList();
         }
 
-        public void UpdateCourse(Course course)
+        public void UpdateCourse(Course.Library.API.Entities.Course course)
         {
             // no code in this implementation
         }
@@ -158,5 +158,7 @@ namespace CourseLibrary.API.Services
                // dispose resources when needed
             }
         }
+
+       
     }
 }
