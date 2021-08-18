@@ -25,8 +25,7 @@ namespace Course.Library.API.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<AuthorDto>> GetAthors(
-                AuthorsResourceParameters authorsResourceParameters)
+        public ActionResult<IEnumerable<AuthorDto>> GetAthors( [FromQuery] AuthorsResourceParameters authorsResourceParameters)
         {
             IEnumerable<Author> result = _repository.GetAuthors(authorsResourceParameters); 
             return Ok(_mapper.Map<IEnumerable<AuthorDto>>(result));
